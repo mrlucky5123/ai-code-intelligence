@@ -1,5 +1,5 @@
 from engine.validation.code_validator import validate_code
-from engine.execution.executor import CodeExecutor
+from engine.execution.docker_executor import DockerCodeExecutor
 
 
 def analyze_code(code: str, language: str):
@@ -13,7 +13,7 @@ def analyze_code(code: str, language: str):
             "language": language
         }
 
-    executor = CodeExecutor()
+    executor = DockerCodeExecutor()
     execution_result = executor.execute(code, language)
 
     if execution_result.stage == "timeout":
