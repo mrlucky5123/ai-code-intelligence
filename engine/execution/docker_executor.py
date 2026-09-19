@@ -15,7 +15,12 @@ class DockerExecutionResult:
 
 class DockerCodeExecutor:
 
-    def execute(self, code: str, language: str) -> DockerExecutionResult:
+    def execute(
+        self,
+        code: str,
+        language: str,
+        input_data: str = ""
+    ) -> DockerExecutionResult:
 
         if language.lower() != "cpp":
             return DockerExecutionResult(
@@ -27,6 +32,7 @@ class DockerCodeExecutor:
             )
 
         with tempfile.TemporaryDirectory() as temp_dir:
+
             temp_path = Path(temp_dir)
 
             source_file = temp_path / "main.cpp"
@@ -35,10 +41,6 @@ class DockerCodeExecutor:
             container_id = None
 
             try:
-                # --------------------------------------------------
-                # 1. CREATE CONTAINER
-                # --------------------------------------------------
-
                 create_result = subprocess.run(
                     [
                         "docker",
@@ -73,10 +75,6 @@ class DockerCodeExecutor:
 
                 container_id = create_result.stdout.strip()
 
-                # --------------------------------------------------
-                # 2. START CONTAINER
-                # --------------------------------------------------
-
                 subprocess.run(
                     [
                         "docker",
@@ -88,14 +86,11 @@ class DockerCodeExecutor:
                     check=True
                 )
 
-                # --------------------------------------------------
-                # 3. COMPILE
-                # --------------------------------------------------
-
                 compile_result = subprocess.run(
                     [
                         "docker",
                         "exec",
+                        "-i",
                         container_id,
                         "g++",
                         "/workspace/main.cpp",
@@ -115,24 +110,23 @@ class DockerCodeExecutor:
                         stage="compile"
                     )
 
-                # --------------------------------------------------
-                # 4. RUN PROGRAM
-                # --------------------------------------------------
-
                 try:
                     run_result = subprocess.run(
                         [
                             "docker",
                             "exec",
+                            "-i",
                             container_id,
                             "/tmp/main"
                         ],
+                        input=input_data,
                         capture_output=True,
                         text=True,
                         timeout=5
                     )
 
                 except subprocess.TimeoutExpired as error:
+
                     return DockerExecutionResult(
                         stdout=error.stdout or "",
                         stderr=error.stderr or "",
@@ -140,10 +134,6 @@ class DockerCodeExecutor:
                         timed_out=True,
                         stage="timeout"
                     )
-
-                # --------------------------------------------------
-                # 5. DETERMINE RESULT
-                # --------------------------------------------------
 
                 if run_result.returncode == 0:
                     stage = "success"
@@ -160,11 +150,8 @@ class DockerCodeExecutor:
 
             finally:
 
-                # --------------------------------------------------
-                # 6. ALWAYS CLEAN UP
-                # --------------------------------------------------
-
                 if container_id is not None:
+
                     subprocess.run(
                         [
                             "docker",
