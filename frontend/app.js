@@ -6,6 +6,8 @@ const analyzeButton = document.getElementById("analyze-button");
 
 const resultSection = document.getElementById("result-section");
 const statusElement = document.getElementById("status");
+const statusIndicator = document.getElementById("status-indicator");
+const statusDescription = document.getElementById("status-description");
 
 const expectedResult = document.getElementById("expected-result");
 const actualResult = document.getElementById("actual-result");
@@ -18,7 +20,6 @@ analyzeButton.addEventListener("click", analyzeCode);
 
 
 async function analyzeCode() {
-
     const code = codeInput.value.trim();
     const input = inputField.value;
     const expectedOutput = expectedOutputField.value.trim();
@@ -40,7 +41,6 @@ async function analyzeCode() {
     aiSection.classList.add("hidden");
 
     try {
-
         const response = await fetch(
             "http://127.0.0.1:8000/api/v1/analyze",
             {
@@ -68,13 +68,10 @@ async function analyzeCode() {
         showResult(result);
 
     } catch (error) {
-
         alert("Could not connect to the backend.");
-
         console.error(error);
 
     } finally {
-
         analyzeButton.disabled = false;
         analyzeButton.textContent = "Analyze Code";
     }
@@ -82,23 +79,57 @@ async function analyzeCode() {
 
 
 function showResult(result) {
-
     resultSection.classList.remove("hidden");
 
-    statusElement.textContent =
-        result.status.replace("_", " ").toUpperCase();
+    const statusText = result.status.replaceAll("_", " ").toUpperCase();
 
-    expectedResult.textContent =
-        result.expected_output || "";
+    statusElement.textContent = statusText;
 
-    actualResult.textContent =
-        result.actual_output || "";
+    const descriptions = {
+        passed: "Your program produced the expected output.",
+        wrong_answer: "Your program ran successfully, but the output was incorrect.",
+        compile_error: "Your program could not be compiled.",
+        runtime_error: "Your program crashed while running.",
+        timeout: "Your program took too long to finish."
+    };
+
+    statusDescription.textContent =
+        descriptions[result.status] || "The program execution failed.";
+
+    statusIndicator.className = "";
+
+    if (result.status === "passed") {
+        statusIndicator.classList.add("status-success");
+    } else if (result.status === "timeout") {
+        statusIndicator.classList.add("status-warning");
+    } else {
+        statusIndicator.classList.add("status-error");
+    }
+
+    expectedResult.textContent = result.expected_output || "";
+    actualResult.textContent = result.actual_output || "";
 
     if (result.explanation) {
-
         aiSection.classList.remove("hidden");
 
-        explanationElement.textContent =
-            result.explanation;
+        explanationElement.innerHTML = `
+            <div class="explanation-block">
+                <h3>What went wrong</h3>
+                <p>${result.explanation.what_went_wrong}</p>
+            </div>
+
+            <div class="explanation-block">
+                <h3>Why it happened</h3>
+                <p>${result.explanation.why_it_happened}</p>
+            </div>
+
+            <div class="explanation-block">
+                <h3>Responsible code</h3>
+                <pre>${result.explanation.responsible_code}</pre>
+            </div>
+        `;
+    } else {
+        aiSection.classList.add("hidden");
+        explanationElement.innerHTML = "";
     }
 }

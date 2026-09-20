@@ -22,83 +22,136 @@
         </header>
 
 
-        <section class="editor-section">
+        <section class="workspace">
 
-            <label for="code">C++ Code</label>
+            <!-- LEFT: CODE + INPUT -->
+            <div class="editor-panel">
 
-            <textarea
-                id="code"
-                placeholder="Paste your C++ code here..."
-                spellcheck="false"
-            ></textarea>
+                <section class="editor-section">
 
-        </section>
+                    <label for="code">C++ Code</label>
+
+                    <textarea
+                        id="code"
+                        placeholder="Paste your C++ code here..."
+                        spellcheck="false"></textarea>
+
+                </section>
 
 
-        <section class="input-output-grid">
+                <section class="input-output-grid">
 
-            <div class="field">
+                    <div class="field">
 
-                <label for="input">Input <span>(optional)</span></label>
+                        <label for="input">
+                            Input <span>(optional)</span>
+                        </label>
 
-                <textarea
-                    id="input"
-                    placeholder="Enter input for your program..."
-                    spellcheck="false"
-                ></textarea>
+                        <textarea
+                            id="input"
+                            placeholder="Enter input for your program..."
+                            spellcheck="false"></textarea>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="expected-output">
+                            Expected Output
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="expected-output"
+                            placeholder="Enter the expected output..."
+                            spellcheck="false"
+                            required></textarea>
+
+                    </div>
+
+                </section>
+
+
+                <button id="analyze-button">
+                    Analyze Code
+                </button>
 
             </div>
 
 
-            <div class="field">
+            <!-- RIGHT: RESULTS -->
+            <section
+                id="result-section"
+                class="result-section hidden">
 
-                <label for="expected-output">
-                    Expected Output <span class="required">*</span>
-                </label>
+                <div class="result-header">
 
-                <textarea
-                    id="expected-output"
-                    placeholder="Enter the expected output..."
-                    spellcheck="false"
-                    required
-                ></textarea>
+                    <div class="result-status">
 
-            </div>
+                        <div id="status-indicator"></div>
 
-        </section>
+                        <div>
+                            <div id="status"></div>
+                            <p id="status-description"></p>
+                        </div>
 
+                    </div>
 
-        <button id="analyze-button">
-            Analyze Code
-        </button>
+                    <span id="result-label">
+                        Execution Result
+                    </span>
 
-
-        <section id="result-section" class="result-section hidden">
-
-            <div id="status"></div>
-
-            <div class="output-grid">
-
-                <div>
-                    <h3>Expected Output</h3>
-                    <pre id="expected-result"></pre>
                 </div>
 
-                <div>
-                    <h3>Actual Output</h3>
-                    <pre id="actual-result"></pre>
+
+                <div class="output-grid">
+
+                    <div class="output-card">
+
+                        <div class="output-card-header">
+                            <h3>Expected Output</h3>
+                        </div>
+
+                        <pre id="expected-result"></pre>
+
+                    </div>
+
+
+                    <div class="output-card">
+
+                        <div class="output-card-header">
+                            <h3>Actual Output</h3>
+                        </div>
+
+                        <pre id="actual-result"></pre>
+
+                    </div>
+
                 </div>
 
-            </div>
+
+                <div
+                    id="ai-section"
+                    class="ai-section hidden">
+
+                    <div class="ai-header">
+
+                        <div>
+                            <h2>AI Debugging</h2>
+                            <p>
+                                Analysis based on the execution result
+                            </p>
+                        </div>
+
+                    </div>
 
 
-            <div id="ai-section" class="ai-section hidden">
+                    <div id="explanation"></div>
 
-                <h2>AI Debugging</h2>
+                </div>
 
-                <div id="explanation"></div>
-
-            </div>
+            </section>
 
         </section>
 
