@@ -14,4 +14,6 @@ class DebugContext:
 
 @dataclass
 class DebugExplanation:
-    explanation: str
+    what_went_wrong: str
+    why_it_happened: str
+    responsible_code: str

@@ -28,4 +28,11 @@ provider = GroqProvider()
 result = provider.explain_failure(context)
 
 print("\n===== AI DEBUG EXPLANATION =====\n")
-print(result.explanation)
+print("What went wrong:")
+print(result.what_went_wrong)
+
+print("\nWhy it happened:")
+print(result.why_it_happened)
+
+print("\nResponsible code:")
+print(result.responsible_code)

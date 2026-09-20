@@ -15,7 +15,7 @@ class AnalyzeRequest(BaseModel):
     code: str
     language: str
     input: str = ""
-    expected_output: str = Field(min_lenght=1)
+    expected_output: str = Field(min_length=1)
 
 
 @router.post("/analyze")
@@ -62,7 +62,11 @@ def analyze_code(request: AnalyzeRequest):
 
         explanation_result = debugger.explain_failure(context)
 
-        explanation = explanation_result.explanation
+        explanation = {
+            "what_went_wrong": explanation_result.what_went_wrong,
+            "why_it_happened": explanation_result.why_it_happened,
+            "responsible_code": explanation_result.responsible_code
+        }
 
     return {
         "success": result.passed,

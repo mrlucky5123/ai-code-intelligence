@@ -1,7 +1,8 @@
 import os
-# from urllib import response
+
 from dotenv import load_dotenv
 from groq import Groq
+import json
 
 from engine.ai.models import DebugContext, DebugExplanation
 
@@ -49,11 +50,11 @@ Actual output:
 Compiler/runtime error:
 {context.stderr}
 
-Explain:
+Analyze the failure and explain:
 
-What went wrong.
-Why the program produced the observed result.
-What part of the code is likely responsible.
+1. What went wrong.
+2. Why the program produced the observed result.
+3. What part of the code is likely responsible.
 
 Do not rewrite the entire program.
 Do not invent information that is not supported by the evidence.
@@ -68,8 +69,40 @@ Keep the explanation concise and technically accurate.
                 }
             ],
             temperature=0.2,
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "debug_explanation",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "what_went_wrong": {
+                                "type": "string"
+                            },
+                            "why_it_happened": {
+                                "type": "string"
+                            },
+                            "responsible_code": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "what_went_wrong",
+                            "why_it_happened",
+                            "responsible_code"
+                        ],
+                        "additionalProperties": False
+                    }
+                }
+            }
         )
+        result = response.choices[0].message.content
+        data = json.loads(result)
 
         return DebugExplanation(
-            explanation=response.choices[0].message.content
+            what_went_wrong=data["what_went_wrong"],
+            why_it_happened=data["why_it_happened"],
+            responsible_code=data["responsible_code"]
         )
+
