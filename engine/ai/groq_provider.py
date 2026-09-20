@@ -1,0 +1,75 @@
+import os
+# from urllib import response
+from dotenv import load_dotenv
+from groq import Groq
+
+from engine.ai.models import DebugContext, DebugExplanation
+
+
+load_dotenv()
+
+
+class GroqProvider:
+
+    def __init__(self, model: str = "openai/gpt-oss-20b"):
+        api_key = os.getenv("GROQ_API_KEY")
+
+        if not api_key:
+            raise ValueError("GROQ_API_KEY is not set.")
+
+        self.client = Groq(api_key=api_key)
+        self.model = model
+
+    def explain_failure(
+        self,
+        context: DebugContext
+    ) -> DebugExplanation:
+
+        prompt = f"""
+You are an AI debugging assistant for C++.
+
+Analyze the following failed program execution.
+
+Status:
+{context.status}
+
+Code:
+```cpp
+{context.code}
+
+Input:
+{context.input_data}
+
+Expected output:
+{context.expected_output}
+
+Actual output:
+{context.actual_output}
+
+Compiler/runtime error:
+{context.stderr}
+
+Explain:
+
+What went wrong.
+Why the program produced the observed result.
+What part of the code is likely responsible.
+
+Do not rewrite the entire program.
+Do not invent information that is not supported by the evidence.
+Keep the explanation concise and technically accurate.
+"""
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+            temperature=0.2,
+        )
+
+        return DebugExplanation(
+            explanation=response.choices[0].message.content
+        )

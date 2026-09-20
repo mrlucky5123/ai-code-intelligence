@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Code Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="app">
+
+        <header class="header">
+            <div>
+                <h1>AI Code Intelligence</h1>
+                <p>Write. Run. Understand.</p>
+            </div>
+        </header>
+
+
+        <section class="editor-section">
+
+            <label for="code">C++ Code</label>
+
+            <textarea
+                id="code"
+                placeholder="Paste your C++ code here..."
+                spellcheck="false"
+            ></textarea>
+
+        </section>
+
+
+        <section class="input-output-grid">
+
+            <div class="field">
+
+                <label for="input">Input <span>(optional)</span></label>
+
+                <textarea
+                    id="input"
+                    placeholder="Enter input for your program..."
+                    spellcheck="false"
+                ></textarea>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="expected-output">
+                    Expected Output <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="expected-output"
+                    placeholder="Enter the expected output..."
+                    spellcheck="false"
+                    required
+                ></textarea>
+
+            </div>
+
+        </section>
+
+
+        <button id="analyze-button">
+            Analyze Code
+        </button>
+
+
+        <section id="result-section" class="result-section hidden">
+
+            <div id="status"></div>
+
+            <div class="output-grid">
+
+                <div>
+                    <h3>Expected Output</h3>
+                    <pre id="expected-result"></pre>
+                </div>
+
+                <div>
+                    <h3>Actual Output</h3>
+                    <pre id="actual-result"></pre>
+                </div>
+
+            </div>
+
+
+            <div id="ai-section" class="ai-section hidden">
+
+                <h2>AI Debugging</h2>
+
+                <div id="explanation"></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>

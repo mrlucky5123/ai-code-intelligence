@@ -9,6 +9,7 @@ class DebugTestResult:
     expected_output: str
     actual_output: str
     status: str
+    stderr: str = ""
 
 
 class DebugTestRunner:
@@ -35,8 +36,9 @@ class DebugTestRunner:
             return DebugTestResult(
                 passed=False,
                 expected_output=expected_output,
-                actual_output=execution_result.stderr,
-                status="compile_error"
+                actual_output="",
+                status="compile_error",
+                stderr=execution_result.stderr
             )
 
         if execution_result.stage == "timeout":
@@ -45,7 +47,8 @@ class DebugTestRunner:
                 passed=False,
                 expected_output=expected_output,
                 actual_output="",
-                status="timeout"
+                status="timeout",
+                stderr=""
             )
 
         if execution_result.stage == "runtime":
@@ -53,8 +56,9 @@ class DebugTestRunner:
             return DebugTestResult(
                 passed=False,
                 expected_output=expected_output,
-                actual_output=execution_result.stderr,
-                status="runtime_error"
+                actual_output=execution_result.stdout,
+                status="runtime_error",
+                stderr=execution_result.stderr
             )
 
         actual_output = execution_result.stdout.strip()
@@ -66,5 +70,6 @@ class DebugTestRunner:
             passed=passed,
             expected_output=expected_output,
             actual_output=actual_output,
-            status="passed" if passed else "wrong_answer"
+            status="passed" if passed else "wrong_answer",
+            stderr=execution_result.stderr
         )
