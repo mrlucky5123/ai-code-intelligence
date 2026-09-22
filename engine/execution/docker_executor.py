@@ -22,7 +22,9 @@ class DockerCodeExecutor:
         input_data: str = ""
     ) -> DockerExecutionResult:
 
-        if language.lower() != "cpp":
+        language = language.lower()
+
+        if language not in {"cpp", "python"}:
             return DockerExecutionResult(
                 stdout="",
                 stderr=f"Unsupported language: {language}",
@@ -35,7 +37,12 @@ class DockerCodeExecutor:
 
             temp_path = Path(temp_dir)
 
-            source_file = temp_path / "main.cpp"
+            if language == "cpp":
+                source_file = temp_path / "main.cpp"
+
+            else:
+                source_file = temp_path / "main.py"
+
             source_file.write_text(code)
 
             container_id = None
@@ -86,39 +93,56 @@ class DockerCodeExecutor:
                     check=True
                 )
 
-                compile_result = subprocess.run(
-                    [
-                        "docker",
-                        "exec",
-                        "-i",
-                        container_id,
-                        "g++",
-                        "/workspace/main.cpp",
-                        "-o",
-                        "/tmp/main"
-                    ],
-                    capture_output=True,
-                    text=True
-                )
+                # Compile C++ code
+                if language == "cpp":
 
-                if compile_result.returncode != 0:
-                    return DockerExecutionResult(
-                        stdout=compile_result.stdout,
-                        stderr=compile_result.stderr,
-                        exit_code=compile_result.returncode,
-                        timed_out=False,
-                        stage="compile"
-                    )
-
-                try:
-                    run_result = subprocess.run(
+                    compile_result = subprocess.run(
                         [
                             "docker",
                             "exec",
                             "-i",
                             container_id,
+                            "g++",
+                            "/workspace/main.cpp",
+                            "-o",
                             "/tmp/main"
                         ],
+                        capture_output=True,
+                        text=True
+                    )
+
+                    if compile_result.returncode != 0:
+                        return DockerExecutionResult(
+                            stdout=compile_result.stdout,
+                            stderr=compile_result.stderr,
+                            exit_code=compile_result.returncode,
+                            timed_out=False,
+                            stage="compile"
+                        )
+
+                    run_command = [
+                        "docker",
+                        "exec",
+                        "-i",
+                        container_id,
+                        "/tmp/main"
+                    ]
+
+                # Execute Python directly
+                else:
+
+                    run_command = [
+                        "docker",
+                        "exec",
+                        "-i",
+                        container_id,
+                        "python3",
+                        "/workspace/main.py"
+                    ]
+
+                try:
+                    run_result = subprocess.run(
+                        run_command,
                         input=input_data,
                         capture_output=True,
                         text=True,

@@ -27,7 +27,7 @@ class GroqProvider:
     ) -> DebugExplanation:
 
         prompt = f"""
-You are an AI debugging assistant for C++.
+You are an AI debugging assistant for {context.language}.
 
 Analyze the following failed program execution.
 

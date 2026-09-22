@@ -1,4 +1,4 @@
-SUPPORTED_LANGUAGES = {"cpp"}
+SUPPORTED_LANGUAGES = {"cpp", "python"}
 
 def validate_code(code: str, language: str) -> tuple[bool,str]:
     if not code.strip():

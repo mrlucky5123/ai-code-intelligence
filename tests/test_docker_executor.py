@@ -32,8 +32,6 @@ int main() {
         "cpp"
     )
 
-    print(result)
-
     assert result.stage == "success"
     assert result.exit_code == 0
     assert result.timed_out is False
@@ -53,8 +51,6 @@ int main() {
 """,
         "cpp"
     )
-
-    print(result)
 
     assert result.stage == "compile"
     assert result.timed_out is False
@@ -80,8 +76,6 @@ int main() {
         "cpp"
     )
 
-    print(result)
-
     assert result.stage == "runtime"
     assert result.timed_out is False
     assert result.exit_code != 0
@@ -97,8 +91,6 @@ int main() {
 """,
         "cpp"
     )
-
-    print(result)
 
     assert result.stage == "runtime"
     assert result.exit_code == 100
@@ -119,8 +111,6 @@ int main() {
 """,
         "cpp"
     )
-
-    print(result)
 
     assert result.stage == "timeout"
     assert result.timed_out is True
@@ -147,8 +137,6 @@ int main() {
         "cpp"
     )
 
-    print(result)
-
     assert result.stage == "runtime"
     assert result.exit_code != 0
 
@@ -168,8 +156,6 @@ int main() {
 """,
         "cpp"
     )
-
-    print(result)
 
     after = get_executor_containers()
 
@@ -193,7 +179,89 @@ int main() {
         "cpp"
     )
 
-    print(result)
+    after = get_executor_containers()
+
+    assert result.stage == "timeout"
+    assert result.timed_out is True
+    assert before == after
+
+def test_docker_valid_python():
+    executor = DockerCodeExecutor()
+
+    result = executor.execute(
+        """
+print("Hello from Python")
+""",
+        "python"
+    )
+
+    assert result.stage == "success"
+    assert result.exit_code == 0
+    assert result.timed_out is False
+    assert "Hello from Python" in result.stdout
+
+def test_docker_python_runtime_error():
+    executor = DockerCodeExecutor()
+
+    result = executor.execute(
+        """
+x = 10
+y = 0
+
+print(x / y)
+""",
+        "python"
+    )
+
+    assert result.stage == "runtime"
+    assert result.exit_code != 0
+    assert result.timed_out is False
+    assert result.stderr != ""
+
+def test_docker_python_input():
+    executor = DockerCodeExecutor()
+
+    result = executor.execute(
+        """
+a, b = map(int, input().split())
+print(a + b)
+""",
+        "python",
+        "10 20"
+    )
+
+    assert result.stage == "success"
+    assert result.exit_code == 0
+    assert result.timed_out is False
+    assert result.stdout.strip() == "30"
+
+def test_docker_python_timeout():
+    executor = DockerCodeExecutor()
+
+    result = executor.execute(
+        """
+while True:
+    pass
+""",
+        "python"
+    )
+
+    assert result.stage == "timeout"
+    assert result.timed_out is True
+    assert result.exit_code == -1
+
+def test_docker_python_timeout_cleans_up_container():
+    executor = DockerCodeExecutor()
+
+    before = get_executor_containers()
+
+    result = executor.execute(
+        """
+while True:
+    pass
+""",
+        "python"
+    )
 
     after = get_executor_containers()
 

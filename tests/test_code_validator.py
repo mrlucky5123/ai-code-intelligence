@@ -11,6 +11,6 @@ def test_empty_code():
     assert result == (False, "Code cannot be empty.")
 
 def test_unsupported_language():
-    result = validate_code("print('Hello, World!')", "python")
+    result = validate_code("print('Hello, World!')", "java")
 
-    assert result == (False, "Unsupported language: python")
+    assert result == (False, "Unsupported language: java")
