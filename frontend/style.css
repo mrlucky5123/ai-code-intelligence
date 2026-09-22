@@ -9,14 +9,11 @@
     --surface: #11141a;
     --surface-soft: #151922;
     --border: #252a34;
-
     --text: #f5f7fa;
     --text-secondary: #a7afbd;
     --text-muted: #6f7785;
-
     --accent: #7c8cff;
     --accent-hover: #8b99ff;
-
     --success: #4ade80;
     --error: #f87171;
     --warning: #fbbf24;
@@ -66,11 +63,8 @@ body {
 
 .workspace {
     display: grid;
-
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-
     gap: 20px;
-
     align-items: start;
 }
 
@@ -79,7 +73,6 @@ body {
 
 .editor-panel {
     min-width: 0;
-
     padding: 20px;
 
     border: 1px solid var(--border);
@@ -94,9 +87,7 @@ body {
 label {
     font-size: 12px;
     font-weight: 600;
-
     color: var(--text-secondary);
-
     letter-spacing: 0.01em;
 }
 
@@ -122,7 +113,6 @@ label span {
 
 textarea {
     width: 100%;
-
     resize: vertical;
 
     border: 1px solid var(--border);
@@ -147,9 +137,11 @@ textarea {
         background 0.2s ease;
 }
 
+
 textarea::placeholder {
     color: var(--text-muted);
 }
+
 
 textarea:focus {
     border-color: var(--accent);
@@ -158,6 +150,76 @@ textarea:focus {
         0 0 0 3px rgba(124, 140, 255, 0.10);
 
     background: #0f1218;
+}
+
+
+/* ---------- LANGUAGE SELECTOR ---------- */
+
+#language {
+    width: 100%;
+    padding: 12px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background-color: #0d1015;
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+
+    outline: none;
+    cursor: pointer;
+
+    appearance: none;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--text-muted) 50%
+        ),
+        linear-gradient(
+            135deg,
+            var(--text-muted) 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 18px) 50%,
+        calc(100% - 13px) 50%;
+
+    background-size:
+        5px 5px,
+        5px 5px;
+
+    background-repeat: no-repeat;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+#language:hover {
+    background-color: #0f1218;
+    border-color: #303642;
+}
+
+
+#language:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px rgba(124, 140, 255, 0.10);
+}
+
+
+#language option {
+    background: var(--surface);
+    color: var(--text);
 }
 
 
@@ -172,11 +234,9 @@ textarea:focus {
 
 .input-output-grid {
     display: grid;
-
     grid-template-columns: 1fr 1fr;
 
     gap: 12px;
-
     margin-top: 16px;
 }
 
@@ -190,7 +250,6 @@ textarea:focus {
 
 #analyze-button {
     width: 100%;
-
     margin-top: 16px;
 
     padding: 14px 18px;
@@ -212,13 +271,16 @@ textarea:focus {
         opacity 0.2s ease;
 }
 
+
 #analyze-button:hover {
     background: var(--accent-hover);
 }
 
+
 #analyze-button:active {
     transform: translateY(1px);
 }
+
 
 #analyze-button:disabled {
     cursor: not-allowed;
@@ -230,7 +292,6 @@ textarea:focus {
 
 .result-section {
     min-width: 0;
-
     padding: 20px;
 
     border: 1px solid var(--border);
@@ -241,6 +302,7 @@ textarea:focus {
     min-height: 100%;
 }
 
+
 .hidden {
     display: none;
 }
@@ -250,22 +312,20 @@ textarea:focus {
 
 .result-header {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
 
     gap: 16px;
-
     margin-bottom: 20px;
 }
 
+
 .result-status {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 }
+
 
 #status-indicator {
     width: 9px;
@@ -291,12 +351,14 @@ textarea:focus {
         0 0 0 4px rgba(74, 222, 128, 0.10) !important;
 }
 
+
 .status-warning {
     background: var(--warning) !important;
 
     box-shadow:
         0 0 0 4px rgba(251, 191, 36, 0.10) !important;
 }
+
 
 .status-error {
     background: var(--error) !important;
@@ -313,9 +375,9 @@ textarea:focus {
     font-weight: 700;
 
     letter-spacing: -0.02em;
-
     line-height: 1.2;
 }
+
 
 #status-description {
     margin-top: 4px;
@@ -325,6 +387,7 @@ textarea:focus {
     font-size: 12px;
     line-height: 1.5;
 }
+
 
 #result-label {
     padding: 5px 9px;
@@ -346,11 +409,11 @@ textarea:focus {
 
 .output-grid {
     display: grid;
-
     grid-template-columns: 1fr 1fr;
 
     gap: 10px;
 }
+
 
 .output-card {
     min-width: 0;
@@ -363,6 +426,7 @@ textarea:focus {
     overflow: hidden;
 }
 
+
 .output-card-header {
     padding: 9px 12px;
 
@@ -370,6 +434,7 @@ textarea:focus {
 
     background: var(--surface-soft);
 }
+
 
 .output-card-header h3 {
     font-size: 10px;
@@ -381,12 +446,12 @@ textarea:focus {
     letter-spacing: 0.08em;
 }
 
+
 .output-card pre {
     border: none;
     border-radius: 0;
 
     margin: 0;
-
     min-height: 72px;
 
     padding: 12px;
@@ -408,7 +473,6 @@ textarea:focus {
 
 .ai-section {
     margin-top: 18px;
-
     padding: 20px;
 
     border: 1px solid var(--border);
@@ -417,11 +481,13 @@ textarea:focus {
     background: var(--surface-soft);
 }
 
+
 .ai-header {
     padding-bottom: 16px;
 
     border-bottom: 1px solid var(--border);
 }
+
 
 .ai-section h2 {
     font-size: 17px;
@@ -429,6 +495,7 @@ textarea:focus {
 
     letter-spacing: -0.02em;
 }
+
 
 .ai-header p {
     margin-top: 4px;
@@ -438,9 +505,9 @@ textarea:focus {
     font-size: 12px;
 }
 
+
 #explanation {
     color: var(--text-secondary);
-
     line-height: 1.65;
 }
 
@@ -451,9 +518,11 @@ textarea:focus {
     margin-top: 18px;
 }
 
+
 .explanation-block:first-child {
     margin-top: 16px;
 }
+
 
 .explanation-block h3 {
     margin-bottom: 7px;
@@ -467,6 +536,7 @@ textarea:focus {
     letter-spacing: 0.09em;
 }
 
+
 .explanation-block p {
     color: var(--text-secondary);
 
@@ -474,16 +544,15 @@ textarea:focus {
     line-height: 1.65;
 }
 
+
 .explanation-block pre {
     margin-top: 9px;
-
     padding: 12px;
 
     border: 1px solid var(--border);
     border-radius: 8px;
 
     background: #0b0d11;
-
     color: var(--text);
 
     font-family: "JetBrains Mono", "Cascadia Code",

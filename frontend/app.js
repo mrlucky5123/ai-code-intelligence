@@ -1,4 +1,6 @@
 const codeInput = document.getElementById("code");
+const codeLabel = document.getElementById("code-label");
+const languageSelect = document.getElementById("language");
 const inputField = document.getElementById("input");
 const expectedOutputField = document.getElementById("expected-output");
 
@@ -17,15 +19,30 @@ const explanationElement = document.getElementById("explanation");
 
 
 analyzeButton.addEventListener("click", analyzeCode);
+languageSelect.addEventListener("change", updateLanguageUI);
+
+
+function updateLanguageUI() {
+    const language = languageSelect.value;
+
+    if (language === "python") {
+        codeLabel.textContent = "Python Code";
+        codeInput.placeholder = "Paste your Python code here...";
+    } else {
+        codeLabel.textContent = "C++ Code";
+        codeInput.placeholder = "Paste your C++ code here...";
+    }
+}
 
 
 async function analyzeCode() {
     const code = codeInput.value.trim();
+    const language = languageSelect.value;
     const input = inputField.value;
     const expectedOutput = expectedOutputField.value.trim();
 
     if (!code) {
-        alert("Please enter your C++ code.");
+        alert("Please enter your code.");
         return;
     }
 
@@ -50,7 +67,7 @@ async function analyzeCode() {
                 },
                 body: JSON.stringify({
                     code: code,
-                    language: "cpp",
+                    language: language,
                     input: input,
                     expected_output: expectedOutput
                 })
