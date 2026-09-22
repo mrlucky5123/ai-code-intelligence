@@ -17,3 +17,6 @@ starlette==1.6.0
 typing-inspection==0.4.4
 typing_extensions==4.16.0
 uvicorn==0.53.0
+groq==1.7.0
+google-genai==2.24.0
+openai==3.16.2

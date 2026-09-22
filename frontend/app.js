@@ -98,20 +98,26 @@ async function analyzeCode() {
 function showResult(result) {
     resultSection.classList.remove("hidden");
 
-    const statusText = result.status.replaceAll("_", " ").toUpperCase();
+    const statusText =
+        result.status.replaceAll("_", " ").toUpperCase();
 
     statusElement.textContent = statusText;
 
     const descriptions = {
         passed: "Your program produced the expected output.",
-        wrong_answer: "Your program ran successfully, but the output was incorrect.",
-        compile_error: "Your program could not be compiled.",
-        runtime_error: "Your program crashed while running.",
-        timeout: "Your program took too long to finish."
+        wrong_answer:
+            "Your program ran successfully, but the output was incorrect.",
+        compile_error:
+            "Your program could not be compiled.",
+        runtime_error:
+            "Your program crashed while running.",
+        timeout:
+            "Your program took too long to finish."
     };
 
     statusDescription.textContent =
-        descriptions[result.status] || "The program execution failed.";
+        descriptions[result.status] ||
+        "The program execution failed.";
 
     statusIndicator.className = "";
 
@@ -123,8 +129,11 @@ function showResult(result) {
         statusIndicator.classList.add("status-error");
     }
 
-    expectedResult.textContent = result.expected_output || "";
-    actualResult.textContent = result.actual_output || "";
+    expectedResult.textContent =
+        result.expected_output || "";
+
+    actualResult.textContent =
+        result.actual_output || "";
 
     if (result.explanation) {
         aiSection.classList.remove("hidden");
